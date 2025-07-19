@@ -23,7 +23,6 @@ To install the script:
 
 👉 **[Install Script](https://github.com/wolfyrion/ProxmoxNoVnc/blob/main/proxmoxnovnc.user.js)**
 
-> Replace `YOUR_USERNAME` with your GitHub username in the link above.
 
 ---
 
