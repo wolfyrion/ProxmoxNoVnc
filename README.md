@@ -21,7 +21,7 @@ To install the script:
 1. Make sure you have **[Violentmonkey](https://violentmonkey.github.io/)** (or Tampermonkey) installed in your browser.
 2. Click the link below to install the script directly:
 
-👉 **[Install Script](https://raw.githubusercontent.com/YOUR_USERNAME/violentmonkey-scripts/main/read-paste-clipboard.user.js)**
+👉 **[Install Script](https://github.com/wolfyrion/ProxmoxNoVnc/blob/main/proxmoxnovnc.user.js)**
 
 > Replace `YOUR_USERNAME` with your GitHub username in the link above.
 
