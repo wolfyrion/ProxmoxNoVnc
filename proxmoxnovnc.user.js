@@ -4,8 +4,8 @@
 // @version      1.0
 // @description  Read & Paste the whole clipboard , count chars , with enhanced visual feedback
 // @author       Wolfyrion
-// @match        https://*
-// @include      /^.*novnc.*/
+// @match        https://*/:8006/*
+// @include      /^https?:\/\/.*:8006\/.*novnc.*/
 // @require      http://code.jquery.com/jquery-3.3.1.min.js
 // @grant        GM_notification
 // @grant        GM_setValue
@@ -107,7 +107,6 @@
             isProcessingPaste = true;
             showStatus("Pasting...", false);
 
-            // Focus the canvas first
             el.focus();
             await sleep(50);
 
@@ -158,7 +157,6 @@
             });
             return false;
         } finally {
-            // Reset the right-click state after paste completes
             setTimeout(() => {
                 isProcessingPaste = false;
             }, 100);
@@ -170,7 +168,6 @@
         if (canvas.length > 0 && !canvas.attr("id")) {
             canvas.attr("id", "canvas-id");
 
-            // Prevent context menu when in paste mode
             canvas.on("contextmenu", (e) => {
                 if (pasteMode) {
                     e.preventDefault();
@@ -178,14 +175,13 @@
                 }
             });
 
-            // Handle mouse events to prevent right-click state sticking
             canvas.on("mousedown", (e) => {
                 if (isProcessingPaste) {
                     e.preventDefault();
                     return false;
                 }
 
-                if (e.button === 2 && pasteMode) { // Right-click
+                if (e.button === 2 && pasteMode) {
                     e.preventDefault();
                     showStatus("Clipboard was read...", false);
 
@@ -213,7 +209,6 @@
                 }
             });
 
-            // Additional mouseup handler to ensure right-click state is cleared
             canvas.on("mouseup", (e) => {
                 if (isProcessingPaste) {
                     e.preventDefault();
