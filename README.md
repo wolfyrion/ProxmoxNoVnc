@@ -10,7 +10,7 @@ This **Violentmonkey** userscript reads the current contents of your clipboard, 
 - 🔢 Shows real-time character count during paste
 - 🎨 Provides enhanced visual feedback (status/toasts)
 - 🧠 Remembers paste mode ON/OFF across sessions
-- ⚡ Only works in Proxmox environments (port 8086)
+- ⚡ Only works in Proxmox environments (port 8006)
 - 🎛️ Toggle Paste Mode with ALT + P ( you have to be outside of the VM Window )
 
 ---
