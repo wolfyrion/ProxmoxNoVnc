@@ -34,9 +34,10 @@ Perfect for anyone working with character limits (e.g. SEO, Twitter, SMS) who wa
 
 ## ☕ Support the Creator
 
-If you find this script helpful, consider donating:
+If you find this script helpful, consider buying me a coffee!
 
-**📧 PayPal / Email: kyrisk@gmail.com**
+[👉 Donate via PayPal](https://www.paypal.com/donate?business=kyrisk@gmail.com)
+
 
 Your support helps keep useful little tools like this alive!
 
