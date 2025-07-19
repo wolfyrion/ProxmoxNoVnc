@@ -28,7 +28,7 @@ To install the script:
 
 ## 💡 Use Case
 
-Perfect for anyone working with character limits (e.g. SEO, Twitter, SMS) who wants a fast way to paste and review clipboard content with instant visual feedback.
+Perfect for anyone working with Proxmox , no character limits, a fast way to copy  paste with instant visual feedback.
 
 ---
 
