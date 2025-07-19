@@ -4,13 +4,14 @@ This **Violentmonkey** userscript reads the current contents of your clipboard, 
 
 ---
 
-## ✨ Features
-
-- 🔍 **Reads the clipboard** with one click or trigger
-- 📝 **Pastes the content** into the active text field
-- 🔢 **Counts characters** in real-time
-- 🎨 **Enhanced visual feedback** for user clarity
-- ⚡ works only in Proxmox port 8086
+✨ Features:
+- 🔍 Reads the full clipboard text on right-click
+- 📝 Pastes it into the Proxmox noVNC console
+- 🔢 Shows real-time character count during paste
+- 🎨 Provides enhanced visual feedback (status/toasts)
+- 🧠 Remembers paste mode ON/OFF across sessions
+- ⚡ Only works in Proxmox environments (port 8086)
+- 🎛️ Toggle Paste Mode with ALT + P
 
 ---
 
