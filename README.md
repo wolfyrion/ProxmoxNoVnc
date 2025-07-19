@@ -10,7 +10,7 @@ This **Violentmonkey** userscript reads the current contents of your clipboard, 
 - 📝 **Pastes the content** into the active text field
 - 🔢 **Counts characters** in real-time
 - 🎨 **Enhanced visual feedback** for user clarity
-- ⚡ Lightweight, no dependencies
+- ⚡ works only in Proxmox port 8086
 
 ---
 
