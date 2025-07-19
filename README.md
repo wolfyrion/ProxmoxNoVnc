@@ -1,6 +1,6 @@
 # 📋 Proxmox Read & Paste Clipboard Script
 
-This **Violentmonkey** userscript reads the current contents of your clipboard, pastes it into a web input field, counts the characters, and gives you **enhanced visual feedback** – all in one smooth action.
+This **Violentmonkey** userscript reads the current contents of your clipboard, pastes it , counts the characters, and gives you **enhanced visual feedback** – all in one smooth action.
 
 ---
 
