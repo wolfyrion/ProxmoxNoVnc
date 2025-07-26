@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         noVNC Paste for Proxmox
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  Read & Paste the whole clipboard , count chars , with enhanced visual feedback
 // @author       Wolfyrion
 // @match        https://*/:8006/*
@@ -15,12 +15,20 @@
 (function () {
     'use strict';
 
+    // SVG icon for the paste button (Material Icons: content_paste)
+    const PASTE_ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#FFFFFF"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 2h-4.18C14.4.84 13.3 0 12 0S9.6.84 9.18 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 18H5V4h2v3h10V4h2v16z"/></svg>';
+
     // Load saved state or default to true
     let pasteMode = GM_getValue('pasteMode', true);
-    let indicatorTimeout;
     let statusTimeout;
     let isProcessingPaste = false;
+    let toggleButton; // Variable to hold the button element
 
+    /**
+     * Shows a temporary status message for actions like pasting or errors.
+     * @param {string} message - The text to display.
+     * @param {boolean} [isError=false] - If true, displays the message with an error color.
+     */
     function showStatus(message, isError = false) {
         clearTimeout(statusTimeout);
 
@@ -54,36 +62,50 @@
         }, isError ? 5000 : 3000);
     }
 
-    function showPasteStatus() {
-        clearTimeout(indicatorTimeout);
-
-        const existing = document.getElementById("paste-status-indicator");
-        if (existing) existing.remove();
-
-        const div = document.createElement("div");
-        div.id = "paste-status-indicator";
-        div.textContent = "Paste Mode: " + (pasteMode ? "ON" : "OFF");
-        div.style.position = "fixed";
-        div.style.bottom = "20px";
-        div.style.right = "20px";
-        div.style.backgroundColor = pasteMode ? "#388e3c" : "#d32f2f";
-        div.style.color = "white";
-        div.style.padding = "6px 12px";
-        div.style.borderRadius = "8px";
-        div.style.fontFamily = "Arial, sans-serif";
-        div.style.fontSize = "14px";
-        div.style.zIndex = "9999";
-        div.style.opacity = "0.85";
-        div.style.boxShadow = "0 0 5px rgba(0,0,0,0.3)";
-        div.style.transition = "opacity 0.3s ease";
-
-        document.body.appendChild(div);
-
-        indicatorTimeout = setTimeout(() => {
-            div.style.opacity = "0";
-            setTimeout(() => div.remove(), 300);
-        }, 2000);
+    /**
+     * Updates the background color of the toggle button based on the current pasteMode.
+     */
+    function updateToggleButton() {
+        if (!toggleButton) return;
+        toggleButton.style.backgroundColor = pasteMode ? "#388e3c" : "#d32f2f";
     }
+
+    /**
+     * Creates and adds the icon toggle button to the page.
+     */
+    function addToggleButton() {
+        toggleButton = document.createElement("div");
+        toggleButton.id = "paste-toggle-button";
+        toggleButton.innerHTML = PASTE_ICON_SVG; // Set the button's content to the SVG icon
+        toggleButton.style.position = "fixed";
+        toggleButton.style.top = "20px";
+        toggleButton.style.right = "20px";
+        toggleButton.style.width = "40px"; // Set a fixed width
+        toggleButton.style.height = "40px"; // Set a fixed height
+        toggleButton.style.borderRadius = "50%"; // Make it a circle
+        toggleButton.style.zIndex = "9999";
+        toggleButton.style.cursor = "pointer";
+        toggleButton.style.boxShadow = "0 0 8px rgba(0,0,0,0.4)";
+        toggleButton.style.userSelect = "none";
+        toggleButton.style.display = "flex"; // Use flexbox to center the icon
+        toggleButton.style.alignItems = "center";
+        toggleButton.style.justifyContent = "center";
+        toggleButton.style.transition = "background-color 0.2s ease";
+
+        // Set initial state
+        updateToggleButton();
+
+        // Add click listener to toggle the mode
+        toggleButton.addEventListener("click", () => {
+            pasteMode = !pasteMode;
+            GM_setValue('pasteMode', pasteMode);
+            updateToggleButton();
+            showStatus("Paste Mode: " + (pasteMode ? "ON" : "OFF")); // Show temporary feedback
+        });
+
+        document.body.appendChild(toggleButton);
+    }
+
 
     async function sendString(text) {
         const el = document.getElementById("canvas-id");
@@ -183,7 +205,7 @@
 
                 if (e.button === 2 && pasteMode) {
                     e.preventDefault();
-                    showStatus("Clipboard was read...", false);
+                    showStatus("Reading clipboard...", false);
 
                     navigator.clipboard.readText().then(text => {
                         if (text && text.length > 0) {
@@ -193,7 +215,7 @@
                             }
                             sendString(trimmedText);
                         } else {
-                            showStatus("Clipboard is empty", true);
+                            showStatus("Clipboard is empty.", true);
                         }
                     }).catch(err => {
                         const errorMsg = "Clipboard access denied. Check permissions.";
@@ -219,7 +241,8 @@
     }
 
     $(document).ready(function () {
-        showPasteStatus();
+        // Add the toggle button to the UI
+        addToggleButton();
         initCanvas();
 
         const canvasCheckInterval = setInterval(() => {
@@ -229,16 +252,18 @@
             }
         }, 1000);
 
+        // Listen for Alt+P to toggle the mode
         $(document).on("keydown", (e) => {
             if (e.altKey && (e.key === "p" || e.key === "P")) {
+                e.preventDefault();
                 pasteMode = !pasteMode;
                 GM_setValue('pasteMode', pasteMode);
-                showPasteStatus();
-                e.preventDefault();
+                updateToggleButton(); // Update the button's appearance
+                showStatus("Paste Mode: " + (pasteMode ? "ON" : "OFF")); // Show temporary feedback
             }
         });
 
-        console.log("noVNC Paste Script Loaded (Paste Mode: " + (pasteMode ? "ON" : "OFF") + ")");
+        console.log("noVNC Paste Script Loaded (v1.1) (Paste Mode: " + (pasteMode ? "ON" : "OFF") + ")");
     });
 
 })();
